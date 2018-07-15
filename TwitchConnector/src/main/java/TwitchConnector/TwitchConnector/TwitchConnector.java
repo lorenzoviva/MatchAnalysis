@@ -16,7 +16,7 @@ public class TwitchConnector extends Connector{
 	
 	private static final String STREAMS = "streams";
 	
-	public static String getStreamsForGame(String gameId) throws MalformedURLException, IOException {
+	public static String getStreamsByGame(String gameId) throws MalformedURLException, IOException {
 		String query = TWITCH_SERVER + STREAMS + "?game_id=" + gameId;
 		properties = getClientIDPropertiesMap();
 		return query(query, properties);

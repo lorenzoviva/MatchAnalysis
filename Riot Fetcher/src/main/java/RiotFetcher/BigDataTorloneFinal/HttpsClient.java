@@ -13,7 +13,7 @@ public class HttpsClient {
 	private static final String NA_SERVER = "https://na1.api.riotgames.com";
 	private static final String KR_SERVER = "https://kr.api.riotgames.com";
 	private static final String BR_SERVER = "https://br1.api.riotgames.com";
-	private static final String API_KEY = "RGAPI-6c6d4f9b-64fc-4f69-94fa-d973a8fd2a3e";
+	private static final String API_KEY = "RGAPI-02c308a1-896d-4ed6-9d70-fd3f2007698f";
 
 	public static void main(String[] args) {
 		new HttpsClient().connect();
