@@ -1,11 +1,11 @@
-package TwitchConnector.TwitchConnector;
+package bigdatafinal.connector;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import Connector.Connector.Connector;
+import bigdatafinal.connector.Connector;
 
 public class TwitchConnector extends Connector{
 

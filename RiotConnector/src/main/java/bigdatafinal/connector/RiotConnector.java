@@ -1,10 +1,10 @@
-package RiotConnector.RiotConnector;
+package bigdatafinal.connector;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 
-import Connector.Connector.Connector;
+import bigdatafinal.connector.Connector;
 
 public class RiotConnector extends Connector{
 	public static final String EUW_SERVER = "https://euw1.api.riotgames.com";

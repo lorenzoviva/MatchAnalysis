@@ -1,4 +1,4 @@
-package RiotConnector.RiotConnector;
+package bigdatafinal.connector;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -7,7 +7,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println(RiotConnector.getSummonerByName("lollouno", RiotConnector.EUW_SERVER));
+			System.out.println(TwitchConnector.getStreamsByGame("33214"));
 			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block

@@ -1,4 +1,4 @@
-package Connector.Connector;
+package bigdatafinal.connector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
