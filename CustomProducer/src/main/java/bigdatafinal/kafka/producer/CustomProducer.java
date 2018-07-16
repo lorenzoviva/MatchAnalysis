@@ -10,8 +10,9 @@ public class CustomProducer {
 	
 	private Properties props;
 	private Producer<String, String> producer;
+	private String topic;
 	
-	public CustomProducer() {
+	public CustomProducer(String topic) {
 		this.props = new Properties();
 		props.put("bootstrap.servers", "localhost:9092");
 		props.put("acks", "all");
@@ -22,6 +23,7 @@ public class CustomProducer {
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		this.producer = new KafkaProducer<String, String>(props);
+		this.topic = topic;
 	}
 
 	protected void send(String topic, String input) {
