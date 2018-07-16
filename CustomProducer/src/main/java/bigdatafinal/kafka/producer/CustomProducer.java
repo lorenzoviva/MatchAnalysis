@@ -27,11 +27,17 @@ public class CustomProducer {
 	}
 
 	protected void send(String input) {
-		producer.send(new ProducerRecord<String, String>(this.topic, Integer.toString(input.hashCode()), input));
+		try {
+			producer.send(new ProducerRecord<String, String>(this.topic, Integer.toString(input.hashCode()), input));
+		} finally {
+			close();
+		}
 	}
+	
 	protected void sendError(Exception error) {
 		send("{'error':" + error.getMessage() + "}");
 	}
+	
 	protected void close() {
 		this.producer.close();
 	}

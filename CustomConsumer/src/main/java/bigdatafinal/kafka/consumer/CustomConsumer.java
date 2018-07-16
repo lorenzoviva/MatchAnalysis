@@ -1,8 +1,6 @@
 package bigdatafinal.kafka.consumer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.Consumer;
@@ -30,14 +28,16 @@ public class CustomConsumer {
 
 
 
-	public List<String> receiveMessages(){
-		List<String> messages = new ArrayList<String>();
-		//infinite poll loop
-		ConsumerRecords<String, String> records = consumer.poll(100);
-		for (ConsumerRecord<String, String> record : records){
-			System.out.printf("topic = %s, partition = %s, offset = %d, key = %s, value = %s\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
-			messages.add(record.value());
+	public void receiveMessages(){
+		try {
+			while (true) {
+				ConsumerRecords<String, String> records = consumer.poll(1000);
+				for (ConsumerRecord<String, String> record : records){
+					System.out.printf("topic = %s, partition = %s, offset = %d, key = %s, value = %s\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
+				}
+			}
+		} finally {
+			consumer.close();
 		}
-		return messages;
 	}
 }
