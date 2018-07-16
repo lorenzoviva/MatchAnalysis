@@ -8,7 +8,7 @@ import bigdatafinal.connector.RiotConnector;
 public class RiotProducer extends CustomProducer {
 	private static final String TOPIC = "riot";
 	
-	public RiotProducer(String topic) {
+	public RiotProducer() {
 		super(TOPIC);
 	}
 	
