@@ -1,6 +1,6 @@
 package bigdatafinal.kafka.producer;
 
-public class Test {
+public class TestR {
 
 	public static void main(String[] args) {
 		RiotProducer prod = new RiotProducer();
