@@ -8,7 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-public class CustomConsumer {
+public abstract class CustomConsumer {
 	public Consumer<String,String> consumer = null;
 	public CustomConsumer(String[] topics, String group){
 
@@ -26,14 +26,14 @@ public class CustomConsumer {
 		consumer.subscribe(Arrays.asList(topics));
 	}
 
-
+	public abstract void processMessage(String message);
 
 	public void receiveMessages(){
 		try {
 			while (true) {
 				ConsumerRecords<String, String> records = consumer.poll(1000);
 				for (ConsumerRecord<String, String> record : records){
-					System.out.printf("topic = %s, partition = %s, offset = %d, key = %s, value = %s\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
+					processMessage(record.value());
 				}
 			}
 		} finally {
