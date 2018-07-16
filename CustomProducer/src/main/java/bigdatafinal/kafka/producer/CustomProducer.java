@@ -26,10 +26,12 @@ public class CustomProducer {
 		this.topic = topic;
 	}
 
-	protected void send(String topic, String input) {
+	protected void send(String input) {
 		producer.send(new ProducerRecord<String, String>(topic, Integer.toString(input.hashCode()), input));
 	}
-	
+	protected void sendError(Exception error) {
+		send("{'error':" + error.getMessage() + "}");
+	}
 	protected void close() {
 		this.producer.close();
 	}
