@@ -11,6 +11,7 @@ public class TwitchProducer extends CustomProducer {
 	public TwitchProducer() {
 		super(TOPIC);
 	}
+	
 	public void getLeagueOfLegendsStreamList() {
 		try {
 			String streamsByGame = TwitchConnector.getStreamsByGame("21779");

@@ -12,7 +12,7 @@ public class RiotConnector extends Connector{
 	public static final String NA_SERVER = "https://na1.api.riotgames.com";
 	public static final String KR_SERVER = "https://kr.api.riotgames.com";
 	public static final String BR_SERVER = "https://br1.api.riotgames.com";
-	private static final String API_KEY = "RGAPI-02c308a1-896d-4ed6-9d70-fd3f2007698f";
+	private static final String API_KEY = "RGAPI-810e8397-0554-4fd8-b534-0c6fab638936";
 	
 	private static Map<String,String> properties;
 	

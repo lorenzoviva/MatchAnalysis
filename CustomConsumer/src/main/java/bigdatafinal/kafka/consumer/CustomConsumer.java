@@ -10,7 +10,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 public class CustomConsumer {
 	public Consumer<String,String> consumer = null;
-	public CustomConsumer(String topic, String group){
+	public CustomConsumer(String[] topics, String group){
 
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "localhost:9092");
@@ -23,7 +23,7 @@ public class CustomConsumer {
 		consumer = new KafkaConsumer<String, String>(props);
 
 		//subscribe to topic
-		consumer.subscribe(Arrays.asList(topic));
+		consumer.subscribe(Arrays.asList(topics));
 	}
 
 
