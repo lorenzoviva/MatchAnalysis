@@ -6,14 +6,16 @@ import java.net.MalformedURLException;
 import bigdatafinal.connector.TwitchConnector;
 
 public class TwitchProducer extends CustomProducer {
-	private static final String TOPIC = "twitch-stream-unsupervised";
+	private static final String TOPIC = "twitch";
 	
 	public TwitchProducer() {
 		super(TOPIC);
 	}
 	public void getLeagueOfLegendsStreamList() {
 		try {
-			send(TwitchConnector.getStreamsByGame("21779"));
+			String streamsByGame = TwitchConnector.getStreamsByGame("21779");
+			System.out.println("STREAMS: " + streamsByGame);
+			send(streamsByGame);
 		} catch (MalformedURLException e) {
 			sendError(e);
 		} catch (IOException e) {
