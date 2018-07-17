@@ -42,19 +42,32 @@ public class Scheduler {
 		twitchProducer.flush();
 	}
 	private void startConsumers() {
-		MongoDBConsumer mdb = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
-		mdb.receiveMessages();
+
+		new Thread(new RUL()).start();
 		System.out.println("1.1");
 
-		TwitchIDListener til = new TwitchIDListener(new String[]{"loltwitchstreams"}, "1");
-		til.receiveMessages();
+		new Thread(new TIL()).start();
 		System.out.println("1.2");
 
-		TwitchUsernameListener rul = new TwitchUsernameListener(new String[]{"twitchusers"}, "1");
-		rul.receiveMessages();
+		new Thread(new MDB()).start();
 		System.out.println("1.3");
-
-
-
+	}
+	class TIL implements Runnable{
+		public void run() {
+			TwitchIDListener til = new TwitchIDListener(new String[]{"loltwitchstreams"}, "1");
+			til.receiveMessages();
+		}
+	}
+	class RUL implements Runnable{
+		public void run() {
+			TwitchUsernameListener rul = new TwitchUsernameListener(new String[]{"twitchusers"}, "1");
+			rul.receiveMessages();
+		}
+	}
+	class MDB implements Runnable{
+		public void run() {
+			MongoDBConsumer mdb = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
+			mdb.receiveMessages();
+		}
 	}
 }
