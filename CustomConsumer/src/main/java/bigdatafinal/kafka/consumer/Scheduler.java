@@ -24,16 +24,16 @@ public class Scheduler {
 		fetchLolTwitchStreams();
 	}
 	
-	private void fetchLolTwitchStreams() {
+	public void fetchLolTwitchStreams() {
 		twitchProducer.getLeagueOfLegendsStreamList();
 		twitchProducer.flush();
 	}
 
-	private void fetchNextLolTwitchStreams(String pagination) {
+	public void fetchNextLolTwitchStreams(String pagination) {
 		twitchProducer.getLeagueOfLegendsStreamList(pagination);
 		twitchProducer.flush();
 	}
-	private void fetchTwitchUsernameFromId(String twitchId) {
+	public void fetchTwitchUsernameFromId(String twitchId) {
 		twitchProducer.getNameFromId(twitchId);
 		twitchProducer.flush();
 

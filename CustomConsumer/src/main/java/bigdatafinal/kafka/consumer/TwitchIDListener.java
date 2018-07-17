@@ -14,8 +14,7 @@ public class TwitchIDListener extends CustomConsumer {
 	public void processMessage(ConsumerRecord<String, String> record) {
 		Scheduler scheduler = Scheduler.getInstance();
 		JSONObject jsonObject = new JSONObject(record.value());
-		jsonObject.getString("user_id");
-		
+		scheduler.fetchTwitchUsernameFromId(jsonObject.getString("user_id"));
 	}
 	
 
