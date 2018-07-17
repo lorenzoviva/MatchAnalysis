@@ -7,11 +7,11 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class CustomProducer {
-	
+
 	private Properties props;
 	private Producer<String, String> producer;
 	private String topic;
-	
+
 	public CustomProducer(String topic) {
 		this.props = new Properties();
 		props.put("bootstrap.servers", "localhost:9092");
@@ -27,17 +27,13 @@ public class CustomProducer {
 	}
 
 	protected void send(String input) {
-		try {
-			producer.send(new ProducerRecord<String, String>(this.topic, Integer.toString(input.hashCode()), input));
-		} finally {
-			close();
-		}
+		producer.send(new ProducerRecord<String, String>(this.topic, Integer.toString(input.hashCode()), input));
 	}
-	
+
 	protected void sendError(Exception error) {
 		send("{'error':" + error.getMessage() + "}");
 	}
-	
+
 	protected void close() {
 		this.producer.close();
 	}
