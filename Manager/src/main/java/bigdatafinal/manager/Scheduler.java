@@ -1,14 +1,7 @@
 package bigdatafinal.manager;
 
-import org.bson.Document;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoCollection;
-import com.mongodb.async.client.MongoDatabase;
-
+import bigdatafinal.kafka.consumer.CustomConsumer;
+import bigdatafinal.kafka.consumer.MongoDBConsumer;
 import bigdatafinal.kafka.producer.TwitchProducer;
 
 public class Scheduler {
@@ -16,7 +9,7 @@ public class Scheduler {
 	private static Scheduler instance = null;
 
 	public static void main(String[] args) {
-		Scheduler.getInstance().fetchLolTwitchStreams();
+		getInstance();
 	}
 
 	public static Scheduler getInstance() {
@@ -26,15 +19,26 @@ public class Scheduler {
 		return instance;
 	}
 
-	private static void fetchLolTwitchStreams() {
+	public Scheduler() {
+		startConsumers();
+		fetchLolTwitchStreams();
+	}
+	private void fetchLolTwitchStreams() {
 		TwitchProducer prod = new TwitchProducer();
 		prod.getLeagueOfLegendsStreamList();
 		prod.close();
 	}
 
-	private static void fetchNextLolTwitchStreams(String pagination) {
+	private void fetchNextLolTwitchStreams(String pagination) {
 		TwitchProducer prod = new TwitchProducer();
 		prod.getLeagueOfLegendsStreamList(pagination);
 		prod.close();
+	}
+	private void fetchTwitchUsernameFromId(String twitchID) {
+		
+	}
+	private void startConsumers() {
+		MongoDBConsumer cc = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
+		cc.receiveMessages();
 	}
 }
