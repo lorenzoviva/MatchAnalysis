@@ -2,24 +2,27 @@ package bigdatafinal.connector;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 import bigdatafinal.connector.Connector;
 
 public class TwitchConnector extends Connector{
-
-	private static final String TWITCH_SERVER = "https://api.twitch.tv/helix/";
+	private static final String PROTOCOL = "https";
+	private static final String TWITCH_SERVER = "api.twitch.tv";
 	private static final String CLIENT_ID = "7jau2g0pia1o2gpoaui8boopmkwb7i";
 	
 	private static Map<String,String> properties;
 	
-	private static final String STREAMS = "streams";
+	private static final String STREAMS = "/helix/streams";
 	
-	public static String getStreamsByGame(String gameId) throws MalformedURLException, IOException {
-		String query = TWITCH_SERVER + STREAMS + "?game_id=" + gameId;
+	public static String getStreamsByGame(String gameId) throws MalformedURLException, IOException, URISyntaxException {
+//		String query = TWITCH_SERVER + STREAMS + "?game_id=" + gameId;
 		properties = getClientIDPropertiesMap();
-		return query(query, properties);
+		URI uri = new URI(PROTOCOL, TWITCH_SERVER,STREAMS,"game_id=" + gameId,null);
+		return query(uri.toURL());	
 		
 	}
 

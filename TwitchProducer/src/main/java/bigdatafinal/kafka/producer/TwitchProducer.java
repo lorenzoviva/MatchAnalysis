@@ -2,6 +2,7 @@ package bigdatafinal.kafka.producer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import bigdatafinal.connector.TwitchConnector;
 
@@ -20,6 +21,8 @@ public class TwitchProducer extends CustomProducer {
 		} catch (MalformedURLException e) {
 			sendError(e);
 		} catch (IOException e) {
+			sendError(e);
+		} catch (URISyntaxException e) {
 			sendError(e);
 		}
 	}
