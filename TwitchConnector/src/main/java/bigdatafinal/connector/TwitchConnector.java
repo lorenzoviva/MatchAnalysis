@@ -10,7 +10,7 @@ import java.util.Map;
 import bigdatafinal.connector.Connector;
 
 public class TwitchConnector extends Connector{
-	private static final String PROTOCOL = "https";
+	private static final String SCHEME = "https";
 	private static final String TWITCH_SERVER = "api.twitch.tv";
 	private static final String CLIENT_ID = "7jau2g0pia1o2gpoaui8boopmkwb7i";
 	
@@ -21,8 +21,8 @@ public class TwitchConnector extends Connector{
 	public static String getStreamsByGame(String gameId) throws MalformedURLException, IOException, URISyntaxException {
 //		String query = TWITCH_SERVER + STREAMS + "?game_id=" + gameId;
 		properties = getClientIDPropertiesMap();
-		URI uri = new URI(PROTOCOL, TWITCH_SERVER,STREAMS,"game_id=" + gameId,null);
-		return query(uri.toURL());	
+		URI uri = new URI(SCHEME, TWITCH_SERVER,STREAMS,"game_id=" + gameId,null);
+		return query(uri.toURL(), properties);	
 		
 	}
 
