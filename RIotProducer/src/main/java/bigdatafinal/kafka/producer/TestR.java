@@ -4,7 +4,7 @@ public class TestR {
 
 	public static void main(String[] args) {
 		RiotProducer prod = new RiotProducer();
-		prod.getSummonerByName();
+		prod.getSummonerByName("Seggio");
 		prod.close();
 	}
 	
