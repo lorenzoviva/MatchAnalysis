@@ -26,18 +26,23 @@ public abstract class CustomConsumer {
 		consumer.subscribe(Arrays.asList(topics));
 	}
 
-	public abstract void processMessage(String message);
+	public abstract void processMessage(ConsumerRecord<String,String> record);
 
 	public void receiveMessages(){
 		try {
 			while (true) {
 				ConsumerRecords<String, String> records = consumer.poll(1000);
 				for (ConsumerRecord<String, String> record : records){
-					processMessage(record.value());
+					processMessage(record);
 				}
 			}
 		} finally {
 			consumer.close();
 		}
+	}
+
+	public void processMessage(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 }
