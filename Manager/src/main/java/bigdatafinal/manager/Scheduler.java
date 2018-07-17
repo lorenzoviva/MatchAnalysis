@@ -16,7 +16,7 @@ public class Scheduler {
 	private static Scheduler instance = null;
 
 	public static void main(String[] args) {
-		fetchLolTwitchStreams();
+		Scheduler.getInstance().fetchLolTwitchStreams();
 	}
 
 	public static Scheduler getInstance() {
