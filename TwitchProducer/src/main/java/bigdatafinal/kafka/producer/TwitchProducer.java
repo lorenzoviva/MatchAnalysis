@@ -8,10 +8,9 @@ import java.util.List;
 import bigdatafinal.connector.TwitchConnector;
 
 public class TwitchProducer extends CustomProducer {
-	private static final String TOPIC = "twitch";
 
 	public TwitchProducer() {
-		super(TOPIC);
+		super();
 	}
 
 	public void getLeagueOfLegendsStreamList() {
@@ -21,7 +20,7 @@ public class TwitchProducer extends CustomProducer {
 
 			System.out.println("STREAMS: " + streamsByGame);
 			for (String elem : streamList) {
-				send(elem);
+				send(elem,"twitch");
 			}
 		} catch (MalformedURLException e) {
 			sendError(e);

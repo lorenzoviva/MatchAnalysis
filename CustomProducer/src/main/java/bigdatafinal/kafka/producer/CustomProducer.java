@@ -15,9 +15,8 @@ public class CustomProducer {
 
 	private Properties props;
 	private Producer<String, String> producer;
-	private String topic;
 
-	public CustomProducer(String topic) {
+	public CustomProducer() {
 		this.props = new Properties();
 		props.put("bootstrap.servers", "localhost:9092");
 		props.put("acks", "all");
@@ -28,14 +27,13 @@ public class CustomProducer {
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		this.producer = new KafkaProducer<String, String>(props);
-		this.topic = topic;
 	}
 
-	protected void send(String input) {
+	protected void send(String input,String topic) {
 		JSONObject jsonObject = new JSONObject(input);
 		jsonObject.put("mongo_time", Long.toString(new Date().getTime()));
 		String stringToSend = jsonObject.toString();
-		producer.send(new ProducerRecord<String, String>(this.topic, Integer.toString(stringToSend.hashCode()), stringToSend));
+		producer.send(new ProducerRecord<String, String>(topic, Integer.toString(stringToSend.hashCode()), stringToSend));
 	}
 
 	protected List<String> splitData(String jsonString, String field) {
@@ -49,7 +47,7 @@ public class CustomProducer {
 	}
 	
 	protected void sendError(Exception error) {
-		send("{'error':" + error.getMessage() + "}");
+		send("{'error':" + error.getMessage() + "}","error");
 	}
 
 	protected void close() {
