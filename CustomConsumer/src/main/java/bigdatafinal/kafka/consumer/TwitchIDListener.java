@@ -1,7 +1,7 @@
 package bigdatafinal.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.common.utils.Scheduler;
+
 import org.json.JSONObject;
 
 public class TwitchIDListener extends CustomConsumer {

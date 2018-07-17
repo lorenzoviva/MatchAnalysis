@@ -42,8 +42,13 @@
 			<version>3.8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>Manager</groupId>
-			<artifactId>Manager</artifactId>
+			<groupId>TwitchProducer</groupId>
+			<artifactId>TwitchProducer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>RiotProducer</groupId>
+			<artifactId>RiotProducer</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

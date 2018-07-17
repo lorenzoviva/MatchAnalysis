@@ -53,4 +53,9 @@ public class CustomProducer {
 	public void close() {
 		this.producer.close();
 	}
+	
+
+	public void flush() {
+		this.producer.flush();		
+	}
 }

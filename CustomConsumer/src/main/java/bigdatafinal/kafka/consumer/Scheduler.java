@@ -1,12 +1,11 @@
-package bigdatafinal.manager;
+package bigdatafinal.kafka.consumer;
 
-import bigdatafinal.kafka.consumer.CustomConsumer;
-import bigdatafinal.kafka.consumer.MongoDBConsumer;
 import bigdatafinal.kafka.producer.TwitchProducer;
 
 public class Scheduler {
 
 	private static Scheduler instance = null;
+	private TwitchProducer twitchProducer;
 
 	public static void main(String[] args) {
 		getInstance();
@@ -20,22 +19,24 @@ public class Scheduler {
 	}
 
 	public Scheduler() {
+		twitchProducer = new TwitchProducer();
 		startConsumers();
 		fetchLolTwitchStreams();
 	}
+	
 	private void fetchLolTwitchStreams() {
-		TwitchProducer prod = new TwitchProducer();
-		prod.getLeagueOfLegendsStreamList();
-		prod.close();
+		twitchProducer.getLeagueOfLegendsStreamList();
+		twitchProducer.flush();
 	}
 
 	private void fetchNextLolTwitchStreams(String pagination) {
-		TwitchProducer prod = new TwitchProducer();
-		prod.getLeagueOfLegendsStreamList(pagination);
-		prod.close();
+		twitchProducer.getLeagueOfLegendsStreamList(pagination);
+		twitchProducer.flush();
 	}
-	private void fetchTwitchUsernameFromId(String twitchID) {
-		
+	private void fetchTwitchUsernameFromId(String twitchId) {
+		twitchProducer.getNameFromId(twitchId);
+		twitchProducer.flush();
+
 	}
 	private void startConsumers() {
 		MongoDBConsumer cc = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
