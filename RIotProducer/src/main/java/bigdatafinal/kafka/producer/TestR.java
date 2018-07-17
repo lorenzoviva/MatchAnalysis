@@ -6,7 +6,7 @@ public class TestR {
 
 	public static void main(String[] args) {
 		RiotProducer prod = new RiotProducer();
-		prod.getSummonerByName("Seggio", RiotConnector.EUW_SERVER);
+		prod.getSummonerByName("Shiphtur", RiotConnector.NA_SERVER);
 		prod.close();
 	}
 	
