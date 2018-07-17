@@ -24,7 +24,12 @@ public class TwitchConnector extends Connector{
 		properties = getClientIDPropertiesMap();
 		URI uri = new URI(SCHEME, TWITCH_SERVER,STREAMS,"game_id=" + gameId,null);
 		return query(uri.toURL(), properties);	
-		
+	}
+	
+	public static String getStreamsByGame(String gameId, String pagination) throws URISyntaxException, MalformedURLException, IOException {
+		properties = getClientIDPropertiesMap();
+		URI uri = new URI(SCHEME, TWITCH_SERVER,STREAMS,"game_id=" + gameId + "&after=" + pagination,null);
+		return query(uri.toURL(), properties);	
 	}
 	
 	public static String getUserFromId(String userId) throws MalformedURLException, IOException, URISyntaxException {
@@ -38,4 +43,6 @@ public class TwitchConnector extends Connector{
 		properties.put("Client-ID",CLIENT_ID);		
 		return properties;
 	}
+
+
 }

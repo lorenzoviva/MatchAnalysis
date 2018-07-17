@@ -50,7 +50,7 @@ public class CustomProducer {
 		send("{'error':" + error.getMessage() + "}","error");
 	}
 
-	protected void close() {
+	public void close() {
 		this.producer.close();
 	}
 }
