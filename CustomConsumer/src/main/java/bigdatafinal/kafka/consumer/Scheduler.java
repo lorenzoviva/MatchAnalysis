@@ -20,8 +20,12 @@ public class Scheduler {
 
 	public Scheduler() {
 		twitchProducer = new TwitchProducer();
-		startConsumers();
+
 		fetchLolTwitchStreams();
+		System.out.println("1");
+		startConsumers();
+		System.out.println("2");
+
 	}
 	
 	public void fetchLolTwitchStreams() {
@@ -36,10 +40,21 @@ public class Scheduler {
 	public void fetchTwitchUsernameFromId(String twitchId) {
 		twitchProducer.getNameFromId(twitchId);
 		twitchProducer.flush();
-
 	}
 	private void startConsumers() {
-		MongoDBConsumer cc = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
-		cc.receiveMessages();
+		MongoDBConsumer mdb = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
+		mdb.receiveMessages();
+		System.out.println("1.1");
+
+		TwitchIDListener til = new TwitchIDListener(new String[]{"loltwitchstreams"}, "1");
+		til.receiveMessages();
+		System.out.println("1.2");
+
+		TwitchUsernameListener rul = new TwitchUsernameListener(new String[]{"twitchusers"}, "1");
+		rul.receiveMessages();
+		System.out.println("1.3");
+
+
+
 	}
 }

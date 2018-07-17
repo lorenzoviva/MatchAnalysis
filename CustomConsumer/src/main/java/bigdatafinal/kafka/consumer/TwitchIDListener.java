@@ -1,20 +1,40 @@
 package bigdatafinal.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-
+import org.bson.Document;
 import org.json.JSONObject;
+import static com.mongodb.client.model.Filters.*;
+
+import com.mongodb.async.SingleResultCallback;
+import com.mongodb.async.client.MongoClient;
+import com.mongodb.async.client.MongoClients;
+import com.mongodb.async.client.MongoCollection;
+import com.mongodb.async.client.MongoDatabase;
 
 public class TwitchIDListener extends CustomConsumer {
+	protected MongoDatabase database = null;
 
 	public TwitchIDListener(String[] topics, String group) {
 		super(topics, group);
+		MongoClient mongoClient = MongoClients.create();
+		database = mongoClient.getDatabase("bigdatafinal");
 	}
 
 	@Override
 	public void processMessage(ConsumerRecord<String, String> record) {
-		Scheduler scheduler = Scheduler.getInstance();
+		MongoCollection<Document> twitchUsers = database.getCollection("twitchusers");
 		JSONObject jsonObject = new JSONObject(record.value());
-		scheduler.fetchTwitchUsernameFromId(jsonObject.getString("user_id"));
+		final String userid = jsonObject.getString("user_id");
+		twitchUsers.find(eq("user_id", userid)).first(new SingleResultCallback<Document>() {
+			public void onResult(Document doc, Throwable arg1) {
+				System.out.println("doc " + doc);
+				if(doc == null) {
+					Scheduler.getInstance().fetchTwitchUsernameFromId(userid);
+				}
+			}
+		 
+		});
+		
 	}
 	
 
