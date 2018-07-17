@@ -17,6 +17,7 @@ public class TwitchConnector extends Connector{
 	private static Map<String,String> properties;
 	
 	private static final String STREAMS = "/helix/streams";
+	private static final String USERS = "/helix/users";
 	
 	public static String getStreamsByGame(String gameId) throws MalformedURLException, IOException, URISyntaxException {
 //		String query = TWITCH_SERVER + STREAMS + "?game_id=" + gameId;
@@ -24,6 +25,12 @@ public class TwitchConnector extends Connector{
 		URI uri = new URI(SCHEME, TWITCH_SERVER,STREAMS,"game_id=" + gameId,null);
 		return query(uri.toURL(), properties);	
 		
+	}
+	
+	public static String getUserFromId(String userId) throws MalformedURLException, IOException, URISyntaxException {
+		properties = getClientIDPropertiesMap();
+		URI uri = new URI(SCHEME, TWITCH_SERVER,USERS,"id=" + userId,null);
+		return query(uri.toURL(), properties);
 	}
 
 	private static Map<String,String> getClientIDPropertiesMap() {

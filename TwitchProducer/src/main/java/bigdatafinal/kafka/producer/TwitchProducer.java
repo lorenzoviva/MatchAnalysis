@@ -18,9 +18,8 @@ public class TwitchProducer extends CustomProducer {
 			String streamsByGame = TwitchConnector.getStreamsByGame("21779");
 			List<String> streamList = splitData(streamsByGame, "data");
 
-			System.out.println("STREAMS: " + streamsByGame);
 			for (String elem : streamList) {
-				send(elem,"twitch");
+				send(elem,"loltwitchstreams");
 			}
 		} catch (MalformedURLException e) {
 			sendError(e);
@@ -31,6 +30,19 @@ public class TwitchProducer extends CustomProducer {
 		}
 	}
 
+	public void getNameFromId(String twitchId) {
+		try {
+			String twitchUser = TwitchConnector.getUserFromId(twitchId);
+			List<String> userList = splitData(twitchUser, "data");
+			send(userList.get(0),"twitchusers");
+		} catch (MalformedURLException e) {
+			sendError(e);
+		} catch (IOException e) {
+			sendError(e);
+		} catch (URISyntaxException e) {
+			sendError(e);
+		}
+	}
 	//	public void getFortniteStreamList() {
 	//		try {
 	//			send(TwitchConnector.getStreamsByGame("33214"));
