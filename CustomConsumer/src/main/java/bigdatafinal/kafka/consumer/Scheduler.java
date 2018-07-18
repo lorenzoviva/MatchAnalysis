@@ -1,5 +1,11 @@
 package bigdatafinal.kafka.consumer;
 
+import java.io.IOException;
+
+import com.mongodb.async.client.MongoClient;
+import com.mongodb.async.client.MongoClients;
+import com.mongodb.async.client.MongoDatabase;
+
 import bigdatafinal.connector.RiotConnector;
 import bigdatafinal.kafka.producer.RiotProducer;
 import bigdatafinal.kafka.producer.TwitchProducer;
@@ -9,7 +15,7 @@ public class Scheduler {
 	private static Scheduler instance = null;
 	private TwitchProducer twitchProducer;
 	private RiotProducer riotProducer;
-
+	private boolean dropDB = true;
 	public static void main(String[] args) {
 		getInstance();
 	}
@@ -22,6 +28,7 @@ public class Scheduler {
 	}
 
 	public Scheduler() {
+		executeStartupScripts();
 		twitchProducer = new TwitchProducer();
 		riotProducer = new RiotProducer();
 		fetchLolTwitchStreams();
@@ -60,6 +67,21 @@ public class Scheduler {
 		new Thread(new ConsumerRunnable(new TwitchUsernameConsumer(new String[]{"twitchusers"}, "1"))).start();
 		new Thread(new ConsumerRunnable(new RiotUserConsumer(new String[]{"riot"}, "1"))).start();
 		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "2"))).start();
+	}
+	private void executeStartupScripts() {
+		Runtime rt = Runtime.getRuntime();
+		try {
+			rt.exec("/usr/local/kafka/bin/zookeeper-server-start.sh config/zookeeper.properties");
+			rt.exec("/usr/local/kafka/bin/kafka-server-start.sh config/server.properties");
+			rt.exec("sudo service mongod start");
+			if (dropDB) {
+				MongoClient mongoClient = MongoClients.create();
+				MongoDatabase database = mongoClient.getDatabase("bigdatafinal");
+				database.drop(null);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	class ConsumerRunnable implements Runnable {
