@@ -10,7 +10,7 @@ public class ErrorConsumer extends CustomConsumer{
 
 	@Override
 	public void processMessage(ConsumerRecord<String,String> record) {			
-		System.out.println("\\033[31m" + record.value());
+		System.err.println(record.value());
 	}
 
 }

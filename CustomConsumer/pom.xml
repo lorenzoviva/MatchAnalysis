@@ -51,5 +51,10 @@
 			<artifactId>RiotProducer</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 	</dependencies>
 </project>

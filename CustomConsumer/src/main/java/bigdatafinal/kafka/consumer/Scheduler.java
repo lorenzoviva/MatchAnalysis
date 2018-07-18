@@ -67,7 +67,7 @@ public class Scheduler {
 	}
 	
 	private void startConsumers() {
-		new Thread(new ConsumerRunnable(new ErrorConsumer(new String[]{"Error"}, "1"))).start();
+		new Thread(new ConsumerRunnable(new ErrorConsumer(new String[]{"error"}, "1"))).start();
 		new Thread(new ConsumerRunnable(new TwitchStreamConsumer(new String[]{"loltwitchstreams"}, "1"))).start();
 		new Thread(new ConsumerRunnable(new TwitchUsernameConsumer(new String[]{"twitchusers"}, "1"))).start();
 		new Thread(new ConsumerRunnable(new RiotUserConsumer(new String[]{"riot"}, "1"))).start();
@@ -80,7 +80,7 @@ public class Scheduler {
 			Thread.sleep(5000);
 			System.out.println("Zookeeper started. Starting kafka...");
 			rt.exec(kafkaHome+"bin/kafka-server-start.sh "+kafkaHome+"config/server.properties");
-			Thread.sleep(5000);
+			Thread.sleep(15000);
 			System.out.println("Kafka started.");
 
 
