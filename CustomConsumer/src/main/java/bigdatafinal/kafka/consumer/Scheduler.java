@@ -1,11 +1,14 @@
 package bigdatafinal.kafka.consumer;
 
+import bigdatafinal.connector.RiotConnector;
+import bigdatafinal.kafka.producer.RiotProducer;
 import bigdatafinal.kafka.producer.TwitchProducer;
 
 public class Scheduler {
 
 	private static Scheduler instance = null;
 	private TwitchProducer twitchProducer;
+	private RiotProducer riotProducer;
 
 	public static void main(String[] args) {
 		getInstance();
@@ -20,7 +23,7 @@ public class Scheduler {
 
 	public Scheduler() {
 		twitchProducer = new TwitchProducer();
-
+		riotProducer = new RiotProducer();
 		fetchLolTwitchStreams();
 		System.out.println("1");
 		startConsumers();
@@ -30,6 +33,14 @@ public class Scheduler {
 	
 	public void fetchLolTwitchStreams() {
 		twitchProducer.getLeagueOfLegendsStreamList();
+		twitchProducer.flush();
+	}
+	public void fetchRiotPlayerFromUsername(String username) {
+		riotProducer.getSummonerByName(username, RiotConnector.BR_SERVER);
+		riotProducer.getSummonerByName(username, RiotConnector.EUNE_SERVER);
+		riotProducer.getSummonerByName(username, RiotConnector.EUW_SERVER);
+		riotProducer.getSummonerByName(username, RiotConnector.KR_SERVER);
+		riotProducer.getSummonerByName(username, RiotConnector.NA_SERVER);
 		twitchProducer.flush();
 	}
 
@@ -42,32 +53,24 @@ public class Scheduler {
 		twitchProducer.flush();
 	}
 	private void startConsumers() {
-
-		new Thread(new RUL()).start();
+		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1"))).start();
 		System.out.println("1.1");
 
-		new Thread(new TIL()).start();
+		new Thread(new ConsumerRunnable(new TwitchIDListener(new String[]{"loltwitchstreams"}, "1"))).start();
 		System.out.println("1.2");
 
-		new Thread(new MDB()).start();
+		new Thread(new ConsumerRunnable( new TwitchUsernameListener(new String[]{"twitchusers"}, "1"))).start();
 		System.out.println("1.3");
 	}
-	class TIL implements Runnable{
-		public void run() {
-			TwitchIDListener til = new TwitchIDListener(new String[]{"loltwitchstreams"}, "1");
-			til.receiveMessages();
+	class ConsumerRunnable implements Runnable {
+		CustomConsumer customConsumer;
+		
+		public ConsumerRunnable(CustomConsumer cc) {
+			customConsumer = cc;
 		}
-	}
-	class RUL implements Runnable{
+
 		public void run() {
-			TwitchUsernameListener rul = new TwitchUsernameListener(new String[]{"twitchusers"}, "1");
-			rul.receiveMessages();
-		}
-	}
-	class MDB implements Runnable{
-		public void run() {
-			MongoDBConsumer mdb = new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1");
-			mdb.receiveMessages();
+			customConsumer.receiveMessages();
 		}
 	}
 }

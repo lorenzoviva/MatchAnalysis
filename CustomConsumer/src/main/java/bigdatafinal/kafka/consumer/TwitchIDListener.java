@@ -27,9 +27,12 @@ public class TwitchIDListener extends CustomConsumer {
 		final String userid = jsonObject.getString("user_id");
 		twitchUsers.find(eq("user_id", userid)).first(new SingleResultCallback<Document>() {
 			public void onResult(Document doc, Throwable arg1) {
-				System.out.println("doc " + doc);
 				if(doc == null) {
 					Scheduler.getInstance().fetchTwitchUsernameFromId(userid);
+					System.out.println("Fetching userId: " + userid);
+				}else {
+					System.out.println("Not fetching userId: " + userid);
+
 				}
 			}
 		 
