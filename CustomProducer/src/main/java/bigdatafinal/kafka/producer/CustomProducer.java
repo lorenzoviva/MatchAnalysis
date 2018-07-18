@@ -9,6 +9,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CustomProducer {
@@ -30,10 +31,15 @@ public class CustomProducer {
 	}
 
 	protected void send(String input,String topic) {
-		JSONObject jsonObject = new JSONObject(input);
-		jsonObject.put("mongo_time", Long.toString(new Date().getTime()));
-		String stringToSend = jsonObject.toString();
-		producer.send(new ProducerRecord<String, String>(topic, Integer.toString(stringToSend.hashCode()), stringToSend));
+		try {
+			JSONObject jsonObject = new JSONObject(input);
+			jsonObject.put("mongo_time", Long.toString(new Date().getTime()));
+			String stringToSend = jsonObject.toString();
+			producer.send(new ProducerRecord<String, String>(topic, Integer.toString(stringToSend.hashCode()), stringToSend));
+		}catch(JSONException e) {
+			System.out.println(input);
+			e.printStackTrace();
+		}
 	}
 
 	protected List<String> splitData(String jsonString, String field) {
@@ -47,7 +53,9 @@ public class CustomProducer {
 	}
 	
 	protected void sendError(Exception error) {
-		send("{'error':" + error.getMessage() + "}","error");
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("error",  error.getMessage());
+		send(jsonObject.toString(),"error");
 	}
 
 	public void close() {

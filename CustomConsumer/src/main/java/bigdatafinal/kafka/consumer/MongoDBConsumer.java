@@ -20,12 +20,12 @@ public class MongoDBConsumer extends CustomConsumer{
 	
 	@Override
 	public void processMessage(ConsumerRecord<String,String> record) {
-		System.out.println("Currently processing: " + record.topic() + ": " + record.value());
+		System.out.println("Add to database: " + record.topic() + "\t the value: " + record.value());
 		Document document = Document.parse(record.value());
 		MongoCollection<Document> collection = database.getCollection(record.topic());
 		collection.insertOne(document, new SingleResultCallback<Void>() {
 		    public void onResult(final Void result, final Throwable t) {
-		        System.out.println("Inserted!");
+//		        System.out.println("Inserted!");
 		    }
 		});
 	}
