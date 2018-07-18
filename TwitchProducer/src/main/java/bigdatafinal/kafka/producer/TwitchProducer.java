@@ -3,10 +3,8 @@ package bigdatafinal.kafka.producer;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import bigdatafinal.connector.TwitchConnector;
@@ -17,10 +15,12 @@ public class TwitchProducer extends CustomProducer {
 	public TwitchProducer() {
 		super();
 	}
+	
+	
 
 	public void getLeagueOfLegendsStreamList() {
 		try {
-			String streamsByGame = TwitchConnector.getStreamsByGame("21779");
+			String streamsByGame = TwitchConnector.getIstance().getStreamsByGame("21779");
 			cursor = getPagination(streamsByGame);
 			List<String> streamList = splitData(streamsByGame, "data");
 			
@@ -40,7 +40,7 @@ public class TwitchProducer extends CustomProducer {
 	}
 	public void getLeagueOfLegendsStreamList(String pagination) {
 		try {
-			String streamsByGame = TwitchConnector.getStreamsByGame("21779",pagination);
+			String streamsByGame = TwitchConnector.getIstance().getStreamsByGame("21779",pagination);
 			List<String> streamList = splitData(streamsByGame, "data");
 
 			for (String elem : streamList) {
@@ -56,7 +56,7 @@ public class TwitchProducer extends CustomProducer {
 	}
 	public void getNameFromId(String twitchId) {
 		try {
-			String twitchUser = TwitchConnector.getUserFromId(twitchId);
+			String twitchUser = TwitchConnector.getIstance().getUserFromId(twitchId);
 			List<String> userList = splitData(twitchUser, "data");
 			send(userList.get(0),"twitchusers");
 		} catch (MalformedURLException e) {
@@ -76,7 +76,7 @@ public class TwitchProducer extends CustomProducer {
 	}
 	//	public void getFortniteStreamList() {
 	//		try {
-	//			send(TwitchConnector.getStreamsByGame("33214"));
+	//			send(TwitchConnector.getInstance().getStreamsByGame("33214"));
 	//		} catch (MalformedURLException e) {
 	//			sendError(e);
 	//		} catch (IOException e) {

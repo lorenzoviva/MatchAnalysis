@@ -9,7 +9,7 @@ public class Test {
 	public static void main(String[] args) {
 		String streamsByGame = "";
 		try {
-			streamsByGame = TwitchConnector.getStreamsByGame("33214");
+			streamsByGame = TwitchConnector.getIstance().getStreamsByGame("33214");
 			System.out.println(streamsByGame);
 			
 		} catch (MalformedURLException e) {

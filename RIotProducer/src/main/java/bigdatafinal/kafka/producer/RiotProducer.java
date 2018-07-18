@@ -12,7 +12,7 @@ public class RiotProducer extends CustomProducer {
 	}
 	public void getSummonerByName(String summonerName, String server) {
 		try {
-			String summonerByName = RiotConnector.getSummonerByName(summonerName, server);
+			String summonerByName = RiotConnector.getIstance().getSummonerByName(summonerName, server);
 			System.out.println("SUMMONER: " + summonerByName);
 			send(summonerByName,"riot");
 		} catch (MalformedURLException e) {
