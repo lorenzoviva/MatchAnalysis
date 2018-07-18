@@ -25,7 +25,7 @@ public class MongoDBConsumer extends CustomConsumer{
 		MongoCollection<Document> collection = database.getCollection(record.topic());
 		collection.insertOne(document, new SingleResultCallback<Void>() {
 		    public void onResult(final Void result, final Throwable t) {
-//		        System.out.println("Inserted!");
+		        System.out.println("Inserted!");
 		    }
 		});
 	}
