@@ -49,6 +49,7 @@ public class Connector {
 	protected void updateRates() {
 		if(timeLimit > 0 && requestsLimit > 0) {
 			long now = new Date().getTime();
+			System.out.println("-------------QUERY: " + (now - begin) + "/" + timeLimit+  "   " + requests + "/" + requestsLimit );
 			if(begin == -1) {
 				begin = now;
 			}else if (now - begin < timeLimit ) {
@@ -59,7 +60,7 @@ public class Connector {
 			}
 			if(requests >= requestsLimit) {
 				try {
-					Thread.sleep(now -  begin);
+					Thread.sleep(timeLimit - (now -  begin));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
