@@ -53,14 +53,11 @@ public class Scheduler {
 		twitchProducer.flush();
 	}
 	private void startConsumers() {
+		new Thread(new ConsumerRunnable(new ErrorConsumer(new String[]{"Error"}, "1"))).start();
 		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "1"))).start();
-		System.out.println("1.1");
-
-		new Thread(new ConsumerRunnable(new TwitchIDListener(new String[]{"loltwitchstreams"}, "1"))).start();
-		System.out.println("1.2");
-
-		new Thread(new ConsumerRunnable( new TwitchUsernameListener(new String[]{"twitchusers"}, "1"))).start();
-		System.out.println("1.3");
+		new Thread(new ConsumerRunnable(new TwitchStreamConsumer(new String[]{"loltwitchstreams"}, "1"))).start();
+		new Thread(new ConsumerRunnable( new TwitchUsernameConsumer(new String[]{"twitchusers"}, "1"))).start();
+		new Thread(new ConsumerRunnable( new RiotUserConsumer(new String[]{"riot"}, "1"))).start();
 	}
 	class ConsumerRunnable implements Runnable {
 		CustomConsumer customConsumer;

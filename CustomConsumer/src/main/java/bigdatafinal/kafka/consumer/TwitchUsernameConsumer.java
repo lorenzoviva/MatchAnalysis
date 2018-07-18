@@ -12,10 +12,10 @@ import com.mongodb.async.client.MongoClients;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 
-public class TwitchUsernameListener extends CustomConsumer {
+public class TwitchUsernameConsumer extends CustomConsumer {
 	protected MongoDatabase database = null;
 
-	public TwitchUsernameListener(String[] topics, String group) {
+	public TwitchUsernameConsumer(String[] topics, String group) {
 		super(topics, group);
 		MongoClient mongoClient = MongoClients.create();
 		database = mongoClient.getDatabase("bigdatafinal");
