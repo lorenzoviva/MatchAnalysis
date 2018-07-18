@@ -22,9 +22,12 @@ public class TwitchStreamConsumer extends CustomConsumer {
 
 	@Override
 	public void processMessage(ConsumerRecord<String, String> record) {
+		System.out.println("Currently processing: " + record.value());
+
 		MongoCollection<Document> twitchUsers = database.getCollection("twitchusers");
 		JSONObject jsonObject = new JSONObject(record.value());
 		final String userid = jsonObject.getString("user_id");
+		Scheduler.getInstance().fetchNextLolTwitchStreams();
 		twitchUsers.find(eq("user_id", userid)).first(new SingleResultCallback<Document>() {
 			public void onResult(Document doc, Throwable arg1) {
 				if(doc == null) {
