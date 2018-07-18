@@ -2,6 +2,9 @@ package bigdatafinal.kafka.consumer;
 
 import java.io.IOException;
 
+import org.bson.Document;
+
+import com.mongodb.async.SingleResultCallback;
 import com.mongodb.async.client.MongoClient;
 import com.mongodb.async.client.MongoClients;
 import com.mongodb.async.client.MongoDatabase;
@@ -16,6 +19,8 @@ public class Scheduler {
 	private TwitchProducer twitchProducer;
 	private RiotProducer riotProducer;
 	private boolean dropDB = true;
+	String kafkaHome = "/usr/local/kafka/";
+
 	public static void main(String[] args) {
 		getInstance();
 	}
@@ -71,15 +76,26 @@ public class Scheduler {
 	private void executeStartupScripts() {
 		Runtime rt = Runtime.getRuntime();
 		try {
-			rt.exec("/usr/local/kafka/bin/zookeeper-server-start.sh config/zookeeper.properties");
-			rt.exec("/usr/local/kafka/bin/kafka-server-start.sh config/server.properties");
-			rt.exec("sudo service mongod start");
+			rt.exec(kafkaHome+"bin/zookeeper-server-start.sh "+kafkaHome+"config/zookeeper.properties");
+			Thread.sleep(5000);
+			System.out.println("Zookeeper started. Starting kafka...");
+			rt.exec(kafkaHome+"bin/kafka-server-start.sh "+kafkaHome+"config/server.properties");
+			System.out.println("Kafka started.");
+			Thread.sleep(5000);
+
+//			rt.exec("sudo service mongod start");
 			if (dropDB) {
 				MongoClient mongoClient = MongoClients.create();
 				MongoDatabase database = mongoClient.getDatabase("bigdatafinal");
-				database.drop(null);
+				database.drop(new SingleResultCallback<Void>() {
+					public void onResult(Void arg0, Throwable arg1) {
+						// Robe						
+					}
+				});
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
