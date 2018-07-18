@@ -80,8 +80,9 @@ public class Scheduler {
 			Thread.sleep(5000);
 			System.out.println("Zookeeper started. Starting kafka...");
 			rt.exec(kafkaHome+"bin/kafka-server-start.sh "+kafkaHome+"config/server.properties");
-			System.out.println("Kafka started.");
 			Thread.sleep(5000);
+			System.out.println("Kafka started.");
+
 
 //			rt.exec("sudo service mongod start");
 			if (dropDB) {
