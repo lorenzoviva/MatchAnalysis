@@ -65,12 +65,14 @@ public class Scheduler {
 		twitchProducer2.flush();
 	}
 
-	private void fetchRiotUserEloFromId(String userId) {
-		riotProducer.getEloById(userId, RiotConnector.EUW_SERVER);
-		riotProducer.getEloById(userId, RiotConnector.BR_SERVER);
-		riotProducer.getEloById(userId, RiotConnector.EUNE_SERVER);
-		riotProducer.getEloById(userId, RiotConnector.KR_SERVER);
-		riotProducer.getEloById(userId, RiotConnector.NA_SERVER);
+	private void fetchRiotUserEloFromId(String userId, String username) {
+		riotProducer.getEloById(userId, username, RiotConnector.EUW_SERVER);
+		riotProducer.getEloById(userId, username, RiotConnector.BR_SERVER);
+		riotProducer.getEloById(userId, username, RiotConnector.EUNE_SERVER);
+		riotProducer.getEloById(userId, username, RiotConnector.KR_SERVER);
+		riotProducer.getEloById(userId, username, RiotConnector.NA_SERVER);
+		riotProducer.flush();
+
 	}
 	
 	private void startConsumers() {

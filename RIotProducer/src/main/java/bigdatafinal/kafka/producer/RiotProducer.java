@@ -27,11 +27,12 @@ public class RiotProducer extends CustomProducer {
 		}
 	}
 
-	public void getEloById(String id, String server) {
+	public void getEloById(String id, String username, String server) {
 		try {
 			String answer = RiotConnector.getIstance().getEloById(id, server);
 			JSONObject answerObject = new JSONObject(answer);
 			if (answerObject.has("queueType") && answerObject.get("queueType").equals("RANKED_SOLO_5x5")) {
+				answerObject.put("username", username);
 				System.out.println("ELO: " + answer);
 				send(answer, "elo");
 			}

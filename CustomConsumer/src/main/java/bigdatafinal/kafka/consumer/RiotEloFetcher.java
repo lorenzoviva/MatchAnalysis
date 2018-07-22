@@ -7,14 +7,10 @@ import java.net.URISyntaxException;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
-
-import bigdatafinal.connector.RiotConnector;
 
 public class RiotEloFetcher {
 
@@ -35,8 +31,8 @@ public class RiotEloFetcher {
 		this.collectionToWrite = database.getCollection("elo");
 		BasicDBObject query = new BasicDBObject();
 		query.put("id", 1);
-
-		MongoCursor<Document> cursor = collectionToIter.find().iterator();
+		query.put("name", 1);
+		MongoCursor<Document> cursor = collectionToIter.find(query).iterator();
 		try {
 			while (cursor.hasNext()) {
 				iterInServers(cursor.next());
@@ -47,10 +43,10 @@ public class RiotEloFetcher {
 	}
 
 	private void iterInServers(Document document) {
-		fetchRiotUserEloFromId(doument.get(id).toString());
+		fetchRiotUserEloFromId(document.get("id").toString(), document.get("name").toString());
 	}
-	public static void fetchRiotUserEloFromId(String userId) {
-		Scheduler.getInstance().fetchRiotUserEloFromId(userId);
+	public static void fetchRiotUserEloFromId(String userId, String username) {
+		Scheduler.getInstance().fetchRiotUserEloFromId(userId,username);
 	}
 	
 }

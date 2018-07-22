@@ -31,8 +31,8 @@ public class RiotUserConsumer extends CustomConsumer {
 	public void processMessage(ConsumerRecord<String, String> record) {
 		JSONObject jsonObject = new JSONObject(record.value());
 		final String username = jsonObject.getString("name");
-		//boh? è user-id?
-		RiotEloFetcher.fetchRiotUserEloFromId(jsonObject.getString("user-id"));
+		String userid = jsonObject.getString("id");
+		RiotEloFetcher.fetchRiotUserEloFromId(userid,username);
 		System.out.println("Finally fetched (riot) user: "+ username + " : \t"+ record.value());
 		
 	}
