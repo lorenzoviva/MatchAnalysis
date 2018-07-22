@@ -21,23 +21,7 @@ public class HDFSWriter {
 	private FileSystem fs;
 	private MongoClient mongoClient;
 
-	public static void main(String[] args) {
-		HDFSWriter writer = null;
-		try {
-			writer = new HDFSWriter();
-			writer.iterateCollection("twitchusers");
-			writer.iterateCollection("riot");
-			writer.iterateCollection("elo");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			writer.close();
-		}
-
-	}
-
-	private void close() {
+	public void close() {
 		this.mongoClient.close();
 	}
 
@@ -57,7 +41,7 @@ public class HDFSWriter {
 		this.fs = FileSystem.get(URI.create(HDFS_URI), conf);
 	}
 
-	private void iterateCollection(String collection) throws IOException {
+	public void iterateCollection(String collection) throws IOException {
 		MongoCollection<Document> collectionToIter = database.getCollection(collection);
 		if (collectionToIter.count() == 0) {
 			System.out.println("Collezione " + collection + " vuota.");
@@ -74,7 +58,7 @@ public class HDFSWriter {
 		}
 	}
 
-	private void writeToHDFS(String pathToWrite, String name, String content) throws IOException {
+	public void writeToHDFS(String pathToWrite, String name, String content) throws IOException {
 		// Crea la directory se non esiste già
 		Path newFolderPath = new Path(pathToWrite);
 		if (!fs.exists(newFolderPath)) {
