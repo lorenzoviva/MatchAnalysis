@@ -47,66 +47,10 @@ public class RiotEloFetcher {
 	}
 
 	private void iterInServers(Document document) {
-		String tempString;
-		try {
-			tempString = RiotConnector.getIstance().getEloById(document.get("id").toString(), RiotConnector.EUW_SERVER)
-					.replaceAll("(\\[|\\])", "");
-			tempString = tempString.replaceAll("},", "}#sep#");
-			for (String elem : tempString.split("#sep#")) {
-				if (elem.contains("\"queueType\":\"RANKED_SOLO_5x5\"")) {
-					this.collectionToWrite.insertOne(Document.parse(elem));
-					System.out.println("Inserito " + elem);
-				}
-			}
-
-			tempString = RiotConnector.getIstance().getEloById(document.get("id").toString(), RiotConnector.EUNE_SERVER)
-					.replaceAll("(\\[|\\])", "");
-			tempString = tempString.replaceAll("},", "}#sep#");
-			for (String elem : tempString.split("#sep#")) {
-				if (elem.contains("\"queueType\":\"RANKED_SOLO_5x5\"")) {
-					this.collectionToWrite.insertOne(Document.parse(elem));
-					System.out.println("Inserito " + elem);
-				}
-			}
-
-			tempString = RiotConnector.getIstance().getEloById(document.get("id").toString(), RiotConnector.NA_SERVER)
-					.replaceAll("(\\[|\\])", "");
-			tempString = tempString.replaceAll("},", "}#sep#");
-			for (String elem : tempString.split("#sep#")) {
-				if (elem.contains("\"queueType\":\"RANKED_SOLO_5x5\"")) {
-					this.collectionToWrite.insertOne(Document.parse(elem));
-					System.out.println("Inserito " + elem);
-				}
-			}
-
-			tempString = RiotConnector.getIstance().getEloById(document.get("id").toString(), RiotConnector.KR_SERVER)
-					.replaceAll("(\\[|\\])", "");
-			tempString = tempString.replaceAll("},", "}#sep#");
-			for (String elem : tempString.split("#sep#")) {
-				if (elem.contains("\"queueType\":\"RANKED_SOLO_5x5\"")) {
-					this.collectionToWrite.insertOne(Document.parse(elem));
-					System.out.println("Inserito " + elem);
-				}
-			}
-
-			tempString = RiotConnector.getIstance().getEloById(document.get("id").toString(), RiotConnector.BR_SERVER)
-					.replaceAll("(\\[|\\])", "");
-			tempString = tempString.replaceAll("},", "}#sep#");
-			for (String elem : tempString.split("#sep#")) {
-				if (elem.contains("\"queueType\":\"RANKED_SOLO_5x5\"")) {
-					this.collectionToWrite.insertOne(Document.parse(elem));
-					System.out.println("Inserito " + elem);
-				}
-			}
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		fetchRiotUserEloFromId(doument.get(id).toString());
 	}
+	public static void fetchRiotUserEloFromId(String userId) {
+		Scheduler.getInstance().fetchRiotUserEloFromId(userId);
+	}
+	
 }

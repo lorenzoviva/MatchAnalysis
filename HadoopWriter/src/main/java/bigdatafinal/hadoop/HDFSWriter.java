@@ -66,7 +66,27 @@ public class HDFSWriter {
 			System.out.println("Path " + path + " created.");
 		}
 		Path hdfswritepath = new Path(newFolderPath + "/" + name);
-		FSDataOutputStream outputStream = fs.create(hdfswritepath);
+		FSDataOutputStream outputStream = null;
+		fs.create(hdfswritepath);
+		writeToStream(outputStream, name, content);
+	}
+
+	public void appendToHDFS(String pathToWrite, String name, String content) throws IOException {
+		Path newFolderPath = new Path(pathToWrite);
+		if (!fs.exists(newFolderPath)) {
+			fs.mkdirs(newFolderPath);
+			System.out.println("Path " + path + " created.");
+		}
+		Path hdfswritepath = new Path(newFolderPath + "/" + name);
+		FSDataOutputStream outputStream = null;
+		if (fs.exists(hdfswritepath)) {
+			fs.append(hdfswritepath);
+		} else {
+			fs.create(hdfswritepath);
+		}
+		writeToStream(outputStream, name, content);
+	}
+	private void writeToStream(FSDataOutputStream outputStream,String name, String content) {
 		outputStream.writeBytes(content);
 		System.out.println("Inserito " + name);
 		outputStream.close();

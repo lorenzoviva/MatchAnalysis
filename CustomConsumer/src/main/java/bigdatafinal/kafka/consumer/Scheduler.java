@@ -2,6 +2,11 @@ package bigdatafinal.kafka.consumer;
 
 import java.io.IOException;
 
+import org.bson.Document;
+import org.json.JSONObject;
+
+import com.google.gson.JsonObject;
+
 import bigdatafinal.connector.RiotConnector;
 import bigdatafinal.kafka.producer.RiotProducer;
 import bigdatafinal.kafka.producer.TwitchProducer;
@@ -59,13 +64,22 @@ public class Scheduler {
 		twitchProducer2.getNameFromId(twitchId);
 		twitchProducer2.flush();
 	}
+
+	private void fetchRiotUserEloFromId(String userId) {
+		riotProducer.getEloById(userId, RiotConnector.EUW_SERVER);
+		riotProducer.getEloById(userId, RiotConnector.BR_SERVER);
+		riotProducer.getEloById(userId, RiotConnector.EUNE_SERVER);
+		riotProducer.getEloById(userId, RiotConnector.KR_SERVER);
+		riotProducer.getEloById(userId, RiotConnector.NA_SERVER);
+	}
 	
 	private void startConsumers() {
 		new Thread(new ConsumerRunnable(new ErrorConsumer(new String[]{"error"}, "error"))).start();
 		new Thread(new ConsumerRunnable(new TwitchStreamConsumer(new String[]{"loltwitchstreams"}, "streams"))).start();
 		new Thread(new ConsumerRunnable(new TwitchUsernameConsumer(new String[]{"twitchusers"}, "twitchusers"))).start();
 		new Thread(new ConsumerRunnable(new RiotUserConsumer(new String[]{"riot"}, "riotusers"))).start();
-		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "mongodb"))).start();
+		new Thread(new ConsumerRunnable(new RiotUserConsumer(new String[]{"elo"}, "riotusers"))).start();
+		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot","elo"}, "mongodb"))).start();
 	}
 	private void executeStartupScripts() {
 		Runtime rt = Runtime.getRuntime();
