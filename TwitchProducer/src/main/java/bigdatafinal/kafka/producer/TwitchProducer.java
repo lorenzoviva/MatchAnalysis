@@ -15,15 +15,15 @@ public class TwitchProducer extends CustomProducer {
 	public TwitchProducer() {
 		super();
 	}
-	
-	
+
+
 
 	public void getLeagueOfLegendsStreamList() {
 		try {
 			String streamsByGame = TwitchConnector.getIstance().getStreamsByGame("21779");
 			cursor = getPagination(streamsByGame);
 			List<String> streamList = splitData(streamsByGame, "data");
-			
+
 			for (String elem : streamList) {
 				send(elem,"loltwitchstreams");
 			}
@@ -39,8 +39,10 @@ public class TwitchProducer extends CustomProducer {
 		getLeagueOfLegendsStreamList(cursor);
 	}
 	public void getLeagueOfLegendsStreamList(String pagination) {
+		if (cursor == null) return;
 		try {
 			String streamsByGame = TwitchConnector.getIstance().getStreamsByGame("21779",pagination);
+			cursor = getPagination(streamsByGame);
 			List<String> streamList = splitData(streamsByGame, "data");
 
 			for (String elem : streamList) {
@@ -67,12 +69,17 @@ public class TwitchProducer extends CustomProducer {
 			sendError(e);
 		}
 	}
-	
+
 	protected String getPagination(String jsonString) {
-		JSONObject jsonObject = new JSONObject(jsonString);
-		JSONObject pagination = jsonObject.getJSONObject("pagination");
-		String cursor = pagination.getString("cursor");
-		return cursor;
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);
+			JSONObject pagination = jsonObject.getJSONObject("pagination");
+			String cursor = pagination.getString("cursor");
+			return cursor;
+		} catch (org.json.JSONException e) {
+			sendError(e);
+			return null;
+		}
 	}
 	//	public void getFortniteStreamList() {
 	//		try {

@@ -11,6 +11,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONObject;
+
 public class Connector {
 	private int requests = 0;
 	private long begin = -1;
@@ -66,5 +68,14 @@ public class Connector {
 				}
 			}
 		}
+	}
+	public String arrayToElement(String[] input, String field) {
+		for (int i=0; i<input.length; i++) {
+			JSONObject json = new JSONObject(input[i]);
+			if (json.get("queueType").equals("RANKED_SOLO_5x5")) {
+				return json.toString();
+			}
+		}
+		return null;
 	}
 }

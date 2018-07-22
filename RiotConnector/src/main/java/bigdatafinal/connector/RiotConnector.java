@@ -13,11 +13,12 @@ public class RiotConnector extends Connector{
 	public static final String NA_SERVER = "na1.api.riotgames.com";
 	public static final String KR_SERVER = "kr.api.riotgames.com";
 	public static final String BR_SERVER = "br1.api.riotgames.com";
-	private static final String API_KEY = "RGAPI-dc88d2fc-2f3d-44c7-a6ba-8a6d5fbc64cd";
+	private static final String API_KEY = "RGAPI-17fb4e86-2091-444e-a3c2-f83ffd13a5b0";
 	private static RiotConnector instance;
 	private static Map<String,String> properties;
 	
 	private static final String SUMMONERS = "/lol/summoner/v3/summoners/";
+	private static final String ELO = "/lol/league/v3/positions/";
 	
 	public RiotConnector(int requestsLimit, int timeLimit) {
 		super(requestsLimit, timeLimit);
@@ -29,9 +30,15 @@ public class RiotConnector extends Connector{
 		}
 		return instance;
 	}
+	
 	public String getSummonerByName(String summonerName, String server) throws MalformedURLException, IOException, URISyntaxException {
 		URI uri = new URI(SCHEME, server,SUMMONERS+"by-name/"+summonerName,"api_key="+API_KEY,"");
 		return query(uri.toURL());		
+	}
+	
+	public String getEloById(String id, String server) throws URISyntaxException, MalformedURLException, IOException {
+		URI uri = new URI(SCHEME, server,ELO+"by-summoner/"+id,"api_key="+API_KEY,"");
+		return query(uri.toURL());
 	}
 	
 }

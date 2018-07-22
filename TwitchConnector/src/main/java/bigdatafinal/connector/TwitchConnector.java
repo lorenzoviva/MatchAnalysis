@@ -28,7 +28,7 @@ public class TwitchConnector extends Connector{
 	
 	public static TwitchConnector getIstance() {
 		if (instance == null) {
-			instance = new TwitchConnector(1,1000);
+			instance = new TwitchConnector(40,60000);
 		}
 		return instance;
 	}

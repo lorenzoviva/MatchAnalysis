@@ -2,13 +2,6 @@ package bigdatafinal.kafka.consumer;
 
 import java.io.IOException;
 
-import org.bson.Document;
-
-import com.mongodb.async.SingleResultCallback;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoDatabase;
-
 import bigdatafinal.connector.RiotConnector;
 import bigdatafinal.kafka.producer.RiotProducer;
 import bigdatafinal.kafka.producer.TwitchProducer;
@@ -16,10 +9,10 @@ import bigdatafinal.kafka.producer.TwitchProducer;
 public class Scheduler {
 
 	private static Scheduler instance = null;
-	private TwitchProducer twitchProducer;
+	private TwitchProducer twitchProducer1, twitchProducer2;
 	private RiotProducer riotProducer;
 	private boolean dropDB = true;
-	String kafkaHome = "/usr/local/kafka/";
+	String kafkaHome = "/home/emo/kafka_2.11-1.1.0/";
 
 	public static void main(String[] args) {
 		getInstance();
@@ -34,7 +27,8 @@ public class Scheduler {
 
 	public Scheduler() {
 		executeStartupScripts();
-		twitchProducer = new TwitchProducer();
+		twitchProducer1 = new TwitchProducer();
+		twitchProducer2 = new TwitchProducer();
 		riotProducer = new RiotProducer();
 		fetchLolTwitchStreams();
 		System.out.println("1");
@@ -44,8 +38,8 @@ public class Scheduler {
 	}
 	
 	public void fetchLolTwitchStreams() {
-		twitchProducer.getLeagueOfLegendsStreamList();
-		twitchProducer.flush();
+		twitchProducer1.getLeagueOfLegendsStreamList();
+		twitchProducer1.flush();
 	}
 	public void fetchRiotPlayerFromUsername(String username) {
 		riotProducer.getSummonerByName(username, RiotConnector.BR_SERVER);
@@ -53,25 +47,25 @@ public class Scheduler {
 		riotProducer.getSummonerByName(username, RiotConnector.EUW_SERVER);
 		riotProducer.getSummonerByName(username, RiotConnector.KR_SERVER);
 		riotProducer.getSummonerByName(username, RiotConnector.NA_SERVER);
-		twitchProducer.flush();
+		riotProducer.flush();
 	}
 
 	public void fetchNextLolTwitchStreams() {
-		twitchProducer.getNextLeagueOfLegendsStreamList();
-		twitchProducer.flush();
+		twitchProducer1.getNextLeagueOfLegendsStreamList();
+		twitchProducer1.flush();
 	}
 	
 	public void fetchTwitchUsernameFromId(String twitchId) {
-		twitchProducer.getNameFromId(twitchId);
-		twitchProducer.flush();
+		twitchProducer2.getNameFromId(twitchId);
+		twitchProducer2.flush();
 	}
 	
 	private void startConsumers() {
-		new Thread(new ConsumerRunnable(new ErrorConsumer(new String[]{"error"}, "1"))).start();
-		new Thread(new ConsumerRunnable(new TwitchStreamConsumer(new String[]{"loltwitchstreams"}, "1"))).start();
-		new Thread(new ConsumerRunnable(new TwitchUsernameConsumer(new String[]{"twitchusers"}, "1"))).start();
-		new Thread(new ConsumerRunnable(new RiotUserConsumer(new String[]{"riot"}, "1"))).start();
-		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "2"))).start();
+		new Thread(new ConsumerRunnable(new ErrorConsumer(new String[]{"error"}, "error"))).start();
+		new Thread(new ConsumerRunnable(new TwitchStreamConsumer(new String[]{"loltwitchstreams"}, "streams"))).start();
+		new Thread(new ConsumerRunnable(new TwitchUsernameConsumer(new String[]{"twitchusers"}, "twitchusers"))).start();
+		new Thread(new ConsumerRunnable(new RiotUserConsumer(new String[]{"riot"}, "riotusers"))).start();
+		new Thread(new ConsumerRunnable(new MongoDBConsumer(new String[]{"loltwitchstreams","twitchusers", "riot"}, "mongodb"))).start();
 	}
 	private void executeStartupScripts() {
 		Runtime rt = Runtime.getRuntime();
@@ -85,15 +79,15 @@ public class Scheduler {
 
 
 //			rt.exec("sudo service mongod start");
-			if (dropDB) {
-				MongoClient mongoClient = MongoClients.create();
-				MongoDatabase database = mongoClient.getDatabase("bigdatafinal");
-				database.drop(new SingleResultCallback<Void>() {
-					public void onResult(Void arg0, Throwable arg1) {
-						// Robe						
-					}
-				});
-			}
+//			if (dropDB) {
+//				MongoClient mongoClient = MongoClients.create();
+//				MongoDatabase database = mongoClient.getDatabase("bigdatafinal");
+//				database.drop(new SingleResultCallback<Void>() {
+//					public void onResult(Void arg0, Throwable arg1) {
+//						// Robe						
+//					}
+//				});
+//			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {

@@ -1,22 +1,21 @@
 package bigdatafinal.kafka.consumer;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.bson.Document;
 import org.json.JSONObject;
-import static com.mongodb.client.model.Filters.*;
 
-import com.mongodb.async.SingleResultCallback;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoCollection;
-import com.mongodb.async.client.MongoDatabase;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 public class TwitchStreamConsumer extends CustomConsumer {
 	protected MongoDatabase database = null;
 
 	public TwitchStreamConsumer(String[] topics, String group) {
 		super(topics, group);
-		MongoClient mongoClient = MongoClients.create();
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
 		database = mongoClient.getDatabase("bigdatafinal");
 	}
 
@@ -27,18 +26,20 @@ public class TwitchStreamConsumer extends CustomConsumer {
 		JSONObject jsonObject = new JSONObject(record.value());
 		final String userid = jsonObject.getString("user_id");
 		Scheduler.getInstance().fetchNextLolTwitchStreams();
-		twitchUsers.find(eq("user_id", userid)).first(new SingleResultCallback<Document>() {
-			public void onResult(Document doc, Throwable arg1) {
-				if(doc == null) {
-					Scheduler.getInstance().fetchTwitchUsernameFromId(userid);
-//					System.out.println("Fetching userId: " + userid);
-				}else {
-//					System.out.println("Not fetching userId: " + userid);
-
-				}
-			}
-		 
-		});
+		if (twitchUsers.find(eq("id", userid)).first() == null)
+			Scheduler.getInstance().fetchTwitchUsernameFromId(userid);
+//		twitchUsers.find(eq("id", userid)).first(new SingleResultCallback<Document>() {
+//			public void onResult(Document doc, Throwable arg1) {
+//				if(doc == null) {
+//					Scheduler.getInstance().fetchTwitchUsernameFromId(userid);
+////					System.out.println("Fetching userId: " + userid);
+//				}else {
+////					System.out.println("Not fetching userId: " + userid);
+//
+//				}
+//			}
+//		 
+//		});
 		
 	}
 	

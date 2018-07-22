@@ -23,4 +23,18 @@ public class RiotProducer extends CustomProducer {
 			sendError(e);
 		}
 	}
+	
+	public void getEloById(String id, String server) {
+		try {
+			String summonerByName = RiotConnector.getIstance().getSummonerByName(id, server);
+			System.out.println("ELO: " + summonerByName);
+			send(summonerByName,"elo");
+		} catch (MalformedURLException e) {
+			sendError(e);
+		} catch (IOException e) {
+			sendError(e);
+		} catch (URISyntaxException e) {
+			sendError(e);
+		}
+	}
 }
